@@ -1,0 +1,5 @@
+(a,b)=input().split()
+c=int(a)-int(b)
+if c<0: print("<")
+elif c>0: print(">")
+else: print("==")
