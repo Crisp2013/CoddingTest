@@ -1,0 +1,8 @@
+a=set([])
+b=set([])
+n,m=input().split()
+for i in range(int(m)): a.add(input())
+for i in range(int(n)): b.add(input())
+temp=sorted(list(a&b))
+print(len(temp))
+for i in temp: print(i)
