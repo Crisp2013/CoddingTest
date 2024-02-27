@@ -7,13 +7,15 @@ input = sys.stdin.readline
 n, m, x = list(map(int, input().split()))
 
 graph = dict()
+graph_reverse = dict()
 for i in range(1,n+1):
     graph[i]=[]
+    graph_reverse[i]=[]
 
 for i in range(1,m+1):
     temp = list(map(int, input().split()))
     graph[temp[0]].append((temp[1],temp[2]))
-distance = [INF]*(n+1)
+    graph_reverse[temp[1]].append((temp[0],temp[2]))
 visited = [False]*(n+1)
 
 #5000개 이하에서는 우선순위 큐를 이용하지 않고 처리 가능
@@ -32,33 +34,7 @@ def get_smallest_node():
 #print(graph)
 #TODO:I->X->I의 최대값을 구해야함
 
-each_distance = [INF]*(n+1)
-for start in range(1,n+1):
-    distance = [INF]*(n+1)
-    distance_heap = []
-    for i in range(1,n+1):
-        heapq.heappush(distance_heap,(INF,i))
-    visited = [False]*(n+1)
 
-    distance[start]=0
-    heapq.heappush(distance_heap,(0,start))
-    
-    current = start
-    
-    #중요:반복 횟수는 무조건 n회가 된다(결국 모든 정점을 방문해야함)
-    for i in range(n):
-        if i!=0:#처음이 아니면
-            while True:
-                dis, current = heapq.heappop(distance_heap)
-                if visited[current]!=True:
-                    break
-        visited[current]=True
-        for edge in graph[current]:
-            distance[edge[0]]=min(distance[edge[0]],distance[current]+edge[1])
-            heapq.heappush(distance_heap,(distance[edge[0]],edge[0]))#작은값으로 갱식
-
-    each_distance[start] = distance[x]
-    
 distance = [INF]*(n+1)
 distance_heap = []
 for i in range(1,n+1):
@@ -66,7 +42,7 @@ for i in range(1,n+1):
 visited = [False]*(n+1)
 
 distance[x]=0
-heapq.heappush(distance_heap,(0,start))
+heapq.heappush(distance_heap,(0,x))
     
 current = x
     
@@ -81,11 +57,38 @@ for i in range(n):
     for edge in graph[current]:
         distance[edge[0]]=min(distance[edge[0]],distance[current]+edge[1])
         heapq.heappush(distance_heap,(distance[edge[0]],edge[0]))#작은값으로 갱식
+#두번째
+distance_temp = distance.copy()
+distance = [INF]*(n+1)
+distance_heap = []
+for i in range(1,n+1):
+    heapq.heappush(distance_heap,(INF,i))
+visited = [False]*(n+1)
+
+distance[x]=0
+heapq.heappush(distance_heap,(0,x))
+    
+current = x
+    
+#중요:반복 횟수는 무조건 n회가 된다(결국 모든 정점을 방문해야함)
+for i in range(n):
+    if i!=0:#처음이 아니면
+        while True:
+            dis, current = heapq.heappop(distance_heap)
+            if visited[current]!=True:
+                break
+    visited[current]=True
+    for edge in graph_reverse[current]:
+        distance[edge[0]]=min(distance[edge[0]],distance[current]+edge[1])
+        heapq.heappush(distance_heap,(distance[edge[0]],edge[0]))#작은값으로 갱식
 
 for i in range(n+1):
-    each_distance[i] = each_distance[i] + distance[i]
-each_distance.pop(0)
-print(max(each_distance))
+    distance[i] = distance_temp[i] + distance[i]
+
+
+
+distance.pop(0)
+print(max(distance))
 
     
 
