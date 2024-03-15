@@ -36,8 +36,8 @@ for i in range(t):
                     # print(loop_test[(temp,pc+1)])
                 except:
                     loop_test[(temp,pc)]=0
-                if loop_test[(temp,pc)]>40000000:
-                    strs="Loops"+str(temp)+str(pc)
+                if loop_test[(temp,pc)]>=50000000:
+                    strs="Loops "+str(temp)+" "+str(pc)
                     break
         elif program[pc]==']':
             temp = pc
@@ -56,8 +56,8 @@ for i in range(t):
                     # print(loop_test[(pc,temp+1)])
                 except:
                     loop_test[(pc,temp)]=0
-                if loop_test[(pc,temp)]>40000000:
-                    strs="Loops"+str(pc)+str(temp)
+                if loop_test[(pc,temp)]>=50000000:
+                    strs="Loops "+str(pc)+" "+str(temp)
                     break
         elif program[pc]=='.':
             # print(memory[pointer])
@@ -68,7 +68,7 @@ for i in range(t):
             else:
                 memory[pointer]=255
         # print(pc)
-        if pc_times>=50000000:
+        if pc_times>50000000:
             break
         pc_times+=1
         pc+=1
